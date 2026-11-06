@@ -14,6 +14,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>{{PRODUCT_NAME}}</title>
 <meta name="description" content="{{META_DESCRIPTION}}" />
+<meta property="og:title" content="{{PRODUCT_NAME}}" />
+<meta property="og:description" content="{{META_DESCRIPTION}}" />
+<meta property="og:image" content="assets/product-hero.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+<!-- The hero cutout is the LCP: fetch it first. -->
+<link rel="preload" as="image" href="assets/product-cut.png" fetchpriority="high" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

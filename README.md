@@ -22,7 +22,7 @@
 ```
 cinematic-landing-kit/
 ├── CLAUDE.md                         ← يقرأه Claude Code تلقائيًا (الخلاصة + قائمة التحقق)
-├── memory/                           ← الحمض النووي مفصّلًا (٩ ملفات مرجعية)
+├── memory/                           ← الحمض النووي مفصّلًا (١٤ ملفًا مرجعيًا)
 │   ├── 01-build-playbook.md              الهيكل + محرّك الحركة (Lenis+GSAP) + الهيدر + الـAmbient + الـCTA
 │   ├── 02-scroll-film-canvas.md          الحيلة الأساسية: فيلم كتسلسل إطارات على Canvas (لا video.currentTime)
 │   ├── 03-seamless-transitions.md        مقاطع متطابقة الحدود بلا قطع، ولا تذويب صورتين ثابتتين
@@ -31,7 +31,21 @@ cinematic-landing-kit/
 │   ├── 06-higgsfield-pipeline.md         أوامر CLI، النماذج، قراءة result_url بلا jq، إعادة المحاولة، استخراج الإطارات
 │   ├── 07-modesty-and-identity.md        الاحتشام إلزامي + ثبات هوية المنتج + مكان العلامة الصحيح
 │   ├── 08-preview-and-env-gotchas.md     توقّف rAF في التبويب المخفي، التحقق عبر eval، لا jq/ffmpeg، فخّ ‎<picture>‎
-│   └── 09-quality-bar.md                 معيار الذوق + قائمة الرفض التلقائي
+│   ├── 09-quality-bar.md                 معيار الذوق + قائمة الرفض التلقائي
+│   ├── 10-brief-and-storyboard.md        مدخلات البراند + جدول الـStoryboard قبل أي توليد
+│   ├── 11-motion-timing.md               مفردات الـEasing وجدول التوقيتات وأنماط الحركة
+│   ├── 12-performance-a11y-mobile.md     ميزانيات الأداء + إتاحة الوصول + استراتيجية الموبايل
+│   ├── 13-qa-and-delivery.md             قائمة الفحص الكاملة + لقطات Playwright + التسليمات
+│   └── 14-other-modes.md                 لو عندك موديل GLB حقيقي، أو عايز تطوّر موقع موجود
+├── scripts/
+│   ├── shots.mjs                     ← لقطات QA على ٣ مقاسات (Hero + منتصف الفيلم + الصفحة كاملة)
+│   ├── analyze-site.cjs              ← تحليل موقع (سرعة، وزن، SEO، إتاحة، محتوى) قبل/بعد
+│   ├── optimize-assets.cjs           ← نسخة محسّنة من الصور والموديلات
+│   ├── optimize-model.sh             ← ضغط GLB بـ glTF-Transform + meshopt
+│   └── analyze-and-upgrade.sh        ← تحليل + تحسين + إعادة قياس بأمر واحد
+├── .claude/
+│   ├── skills/kh3don-skill/          ← مهارة kh3don كاملة (مسار الـ3D + مسار فيلم المنتج + أدوات التحليل)
+│   └── settings.json                 ← Hook يشغّل وضع «حلّل وطوّر» تلقائيًا
 └── templates/
     ├── index.skeleton.html           ← المحرّك كاملًا وشغّالًا، تملأ ‎{{PLACEHOLDERS}}‎ فقط
     ├── HIGGSFIELD-PROMPTS.template.md ← قالب برومبتات مرقّم بحدود متطابقة وبنود الهوية والاحتشام
@@ -43,7 +57,7 @@ cinematic-landing-kit/
 ## 🚀 كيفية الاستخدام
 
 **١. انسخ محتويات هذه الحزمة إلى جذر مشروعك:**
-ضع `CLAUDE.md` و`memory/` و`templates/` بجانب كود مشروعك. سيقرأ Claude Code ملف `CLAUDE.md` تلقائيًا في بداية الجلسة، ويُحيلك منه إلى `memory/` لكل التفاصيل.
+ضع `CLAUDE.md` و`memory/` و`templates/` و`scripts/` و`.claude/` بجانب كود مشروعك. سيقرأ Claude Code ملف `CLAUDE.md` تلقائيًا في بداية الجلسة، ويُحيلك منه إلى `memory/` لكل التفاصيل.
 
 **٢. افتح Claude Code في المجلد، وأعطِه منتجك:**
 
@@ -65,6 +79,9 @@ cinematic-landing-kit/
 - **Higgsfield** متّصلًا (عبر الـ MCP أو الـ CLI / مهارة `higgsfield-generate`) ومُسجَّل الدخول.
 - **Node.js** لمعاينة الملف الثابت (`npx serve`).
 - **Python + OpenCV** (`cv2`) لاستخراج إطارات الفيلم (بديلًا عن ffmpeg).
+- اختياري: **Playwright** و**sharp** لسكربتات الفحص والتحسين (`npm i -D playwright sharp && npx playwright install chromium`).
+
+> الحزمة دي متزامنة مع مهارة **kh3don-skill**: المهارة فيها مسار الـ3D الحقيقي (Three.js) ومسار «فيلم المنتج» اللي في الحزمة دي، والحزمة فيها ملخّص مسار الـ3D وأدوات التحليل من المهارة.
 
 ---
 

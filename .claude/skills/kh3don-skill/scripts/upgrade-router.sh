@@ -4,6 +4,8 @@
 # through kh3don-skill's analyze-and-upgrade mode and the other skills that strengthen the result.
 # Prompts that don't match produce no output, so the hook is invisible for normal work.
 #
+# Triggers on English ("analyze and upgrade <url>") and Arabic ("حلل وطور <رابط>") phrasings; see below.
+#
 # Settings entry (project .claude/settings.json or ~/.claude/settings.json):
 #   "hooks": { "UserPromptSubmit": [ { "hooks": [ { "type": "command",
 #     "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/skills/kh3don-skill/scripts/upgrade-router.sh" } ] } ] }
@@ -17,9 +19,25 @@ fi
 [ -z "$prompt" ] && exit 0
 
 lc=$(printf '%s' "$prompt" | tr '[:upper:]' '[:lower:]')
-# Trigger phrases: "analyze and upgrade", "analyse & upgrade", "audit and upgrade", "analyze ... and recommend upgrading",
-# "upgrade this website", "/analyze-and-upgrade"
-if ! printf '%s' "$lc" | grep -qE '(analy[sz]e|audit|review)[^.]{0,60}(and|&|\+|\|)[^.]{0,20}(upgrade|upgrading|optimi[sz]e|redesign|moderni[sz]e)|upgrade (this|my|the) (web)?site|/analyze-and-upgrade'; then
+# Arabic: drop diacritics (tashkeel, tatweel) and unify alef/yeh forms so "حلّل" == "حلل" and "إعادة" == "اعادة".
+# Alternations of literal byte sequences work in any locale, unlike bracket expressions.
+ar=$(printf '%s' "$lc" | sed -E 's/(ً|ٌ|ٍ|َ|ُ|ِ|ّ|ْ|ـ)//g; s/(أ|إ|آ)/ا/g; s/ى/ي/g')
+
+# English trigger phrases: "analyze and upgrade", "analyse & upgrade", "audit and upgrade",
+# "analyze ... and recommend upgrading", "upgrade this website", "/analyze-and-upgrade"
+en_re='(analy[sz]e|audit|review)[^.]{0,60}(and|&|\+|\|)[^.]{0,20}(upgrade|upgrading|optimi[sz]e|redesign|moderni[sz]e)|upgrade (this|my|the) (web)?site|/analyze-and-upgrade'
+# Arabic trigger phrases (after normalization): an analyze verb followed by an upgrade verb, e.g.
+# "حلل وطور"، "حلل الموقع وطوره"، "تحليل وترقية"، "افحص الموقع وحسنه"، "راجع موقعي واعد تصميمه"،
+# or a direct upgrade request: "طور موقعي"، "رقي الموقع"، "ترقية موقعي"، "ارتق بالموقع".
+ar_an='(حلل|تحليل|حللي|افحص|فحص|راجع|مراجعة|قيم|تقييم)'
+ar_up='(طور|تطوير|رقي|ترقية|ارتق|حسن|تحسين|اعد تصميم|اعادة تصميم|حدث|تحديث|جدد|تجديد)'
+ar_re="${ar_an}.{0,160}${ar_up}|(طور|رقي|ارتق|ترقية|تطوير|جدد|حسن)( ب)? ?(موقعي|الموقع|موقع|لموقعي|للموقع)"
+# The Arabic analyze+upgrade pattern also needs a website in view (موقع, a URL, a .zip or a path),
+# so "حلل الكود وحسنه" (analyze this code and improve it) does not trigger it.
+ar_site='موقع|صفحة|لاندنج|https?://|\.zip|(^| )\.?/'
+ar_hit=0
+if printf '%s' "$ar" | grep -qE "$ar_re" && printf '%s' "$ar" | grep -qE "$ar_site"; then ar_hit=1; fi
+if ! printf '%s' "$lc" | grep -qE "$en_re" && [ "$ar_hit" -eq 0 ]; then
   exit 0
 fi
 

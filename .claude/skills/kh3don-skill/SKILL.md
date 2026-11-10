@@ -25,7 +25,7 @@ Setup for the scripts: `npm i -D playwright sharp && npx playwright install chro
 
 One command runs steps 1 and 3: `scripts/analyze-and-upgrade.sh <url|folder|zip> [out-dir]` (output in `audit/<site>/`).
 
-**Automatic trigger.** With the project's `.claude/settings.json` hook, a prompt such as "analyze and upgrade https://example.com" (or "audit & upgrade", "analyze … and recommend upgrading", "upgrade this website", or `/analyze-and-upgrade <target>`) runs `scripts/upgrade-router.sh`. It injects this whole procedure for the turn, including the other skills worth using: SEO, accessibility, brand, frontend design and PDF/Artifact deliverables.
+**Automatic trigger.** With the project's `.claude/settings.json` hook, a prompt such as "analyze and upgrade https://example.com" (or "audit & upgrade", "analyze … and recommend upgrading", "upgrade this website", or `/analyze-and-upgrade <target>`, or Arabic such as "حلل وطور", "حلّل الموقع وطوّره", "تحليل وترقية" or "طوّر موقعي") runs `scripts/upgrade-router.sh`. It injects this whole procedure for the turn, including the other skills worth using: SEO, accessibility, brand, frontend design and PDF/Artifact deliverables.
 
 ## Choose the 3D path
 
